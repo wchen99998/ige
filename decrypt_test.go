@@ -115,23 +115,53 @@ func BenchmarkDecryptBlocks(b *testing.B) {
 	}
 }
 
+func BenchmarkDecryptBlocksAES(b *testing.B) {
+	// Dedicated benchmark for AES fast path
+	for _, payload := range []int{
+		16,
+		128,
+		1024,
+		8192,
+		64 * 1024,
+		512 * 1024,
+	} {
+		b.Run(fmt.Sprintf("AES-%d", payload), func(b *testing.B) {
+			src := make([]byte, payload)
+			dst := make([]byte, payload)
+			
+			c, err := aes.NewCipher(TestVectors[0].Key)
+			if err != nil {
+				b.Fatal(err)
+			}
+
+			b.ReportAllocs()
+			b.SetBytes(int64(payload))
+			b.ResetTimer()
+
+			for i := 0; i < b.N; i++ {
+				decryptBlocksAES(c, TestVectors[0].IV, dst, src)
+			}
+		})
+	}
+}
+
 func benchDecrypt(n int) func(b *testing.B) {
 	return func(b *testing.B) {
 		b.Helper()
 
 		src := make([]byte, n)
 		dst := make([]byte, n)
+		
+		c, err := aes.NewCipher(TestVectors[0].Key)
+		if err != nil {
+			b.Fatal(err)
+		}
 
 		b.ReportAllocs()
 		b.SetBytes(int64(n))
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			c, err := aes.NewCipher(TestVectors[0].Key)
-			if err != nil {
-				b.Fatal(err)
-			}
-
 			DecryptBlocks(c, TestVectors[0].IV, dst, src)
 		}
 	}

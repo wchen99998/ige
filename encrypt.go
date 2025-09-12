@@ -44,6 +44,14 @@ func EncryptBlocks(block cipher.Block, iv, dst, src []byte) {
 	}
 
 	b := block.BlockSize()
+	
+	// Fast path for AES (16-byte blocks)
+	if b == 16 {
+		encryptBlocksAES(block, iv, dst, src)
+		return
+	}
+	
+	// Generic path for other block sizes
 	c := iv[:b]
 	m := iv[b:]
 
@@ -54,5 +62,25 @@ func EncryptBlocks(block cipher.Block, iv, dst, src []byte) {
 
 		c = dst[o : o+b : o+b]
 		m = src[o : o+b : o+b]
+	}
+}
+
+// encryptBlocksAES is an optimized version for AES (16-byte blocks)
+func encryptBlocksAES(block cipher.Block, iv, dst, src []byte) {
+	c := iv[:16]
+	m := iv[16:]
+	
+	for o := 0; o < len(src); o += 16 {
+		srcBlock := src[o:o+16]
+		dstBlock := dst[o:o+16]
+		
+		// XOR with c, then encrypt, then XOR with m
+		xor.Bytes(dstBlock, srcBlock, c)
+		block.Encrypt(dstBlock, dstBlock)
+		xor.Bytes(dstBlock, dstBlock, m)
+		
+		// Update c and m for next iteration
+		c = dstBlock
+		m = srcBlock
 	}
 }
