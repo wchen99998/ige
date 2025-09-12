@@ -43,6 +43,13 @@ func DecryptBlocks(block cipher.Block, iv, dst, src []byte) {
 		panic("len(dst) < len(src)")
 	}
 
+	// Fast path for AES (16-byte blocks) - most common case
+	if block.BlockSize() == 16 {
+		decryptBlocksAES(block, iv, dst, src)
+		return
+	}
+	
+	// Generic path for other block sizes
 	b := block.BlockSize()
 	c := iv[:b]
 	m := iv[b:]
@@ -58,3 +65,22 @@ func DecryptBlocks(block cipher.Block, iv, dst, src []byte) {
 		c = t
 	}
 }
+
+// decryptBlocksAES is an optimized version for AES (16-byte blocks)
+func decryptBlocksAES(block cipher.Block, iv, dst, src []byte) {
+	c := iv[:16]
+	m := iv[16:]
+	
+	for o := 0; o < len(src); o += 16 {
+		// XOR with m, then decrypt, then XOR with c
+		xor.Bytes(dst[o:o+16:o+16], src[o:o+16:o+16], m)
+		block.Decrypt(dst[o:o+16:o+16], dst[o:o+16:o+16])
+		xor.Bytes(dst[o:o+16:o+16], dst[o:o+16:o+16], c)
+		
+		// Update c and m for next iteration
+		m = dst[o:o+16]
+		c = src[o:o+16]
+	}
+}
+
+
