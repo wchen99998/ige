@@ -1,0 +1,103 @@
+
+benchmarks/single-message/decrypt-order.test:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000005a96a0 <github.com/gotd/ige.decryptSIMD>:
+  5a96a0:	55                   	push   %rbp
+  5a96a1:	48 89 e5             	mov    %rsp,%rbp
+  5a96a4:	48 83 ec 20          	sub    $0x20,%rsp
+  5a96a8:	48 89 5c 24 50       	mov    %rbx,0x50(%rsp)
+  5a96ad:	48 89 74 24 68       	mov    %rsi,0x68(%rsp)
+  5a96b2:	48 8b 4c 24 38       	mov    0x38(%rsp),%rcx
+  5a96b7:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  5a96be:	00 00 
+  5a96c0:	48 83 f9 10          	cmp    $0x10,%rcx
+  5a96c4:	0f 82 60 01 00 00    	jb     5a982a <github.com/gotd/ige.decryptSIMD+0x18a>
+  5a96ca:	48 83 c1 f0          	add    $0xfffffffffffffff0,%rcx
+  5a96ce:	48 8b 54 24 40       	mov    0x40(%rsp),%rdx
+  5a96d3:	48 83 c2 f0          	add    $0xfffffffffffffff0,%rdx
+  5a96d7:	48 f7 da             	neg    %rdx
+  5a96da:	48 c1 fa 3f          	sar    $0x3f,%rdx
+  5a96de:	83 e2 10             	and    $0x10,%edx
+  5a96e1:	4c 8b 54 24 30       	mov    0x30(%rsp),%r10
+  5a96e6:	4c 01 d2             	add    %r10,%rdx
+  5a96e9:	48 83 f9 10          	cmp    $0x10,%rcx
+  5a96ed:	0f 82 32 01 00 00    	jb     5a9825 <github.com/gotd/ige.decryptSIMD+0x185>
+  5a96f3:	90                   	nop
+  5a96f4:	c5 fa 6f 02          	vmovdqu (%rdx),%xmm0
+  5a96f8:	c4 c1 7a 6f 0a       	vmovdqu (%r10),%xmm1
+  5a96fd:	31 c9                	xor    %ecx,%ecx
+  5a96ff:	90                   	nop
+  5a9700:	eb 10                	jmp    5a9712 <github.com/gotd/ige.decryptSIMD+0x72>
+  5a9702:	4c 8d 14 0b          	lea    (%rbx,%rcx,1),%r10
+  5a9706:	c4 c1 7a 7f 02       	vmovdqu %xmm0,(%r10)
+  5a970b:	48 89 d1             	mov    %rdx,%rcx
+  5a970e:	41 0f 10 ce          	movups %xmm14,%xmm1
+  5a9712:	49 39 c8             	cmp    %rcx,%r8
+  5a9715:	0f 8e f2 00 00 00    	jle    5a980d <github.com/gotd/ige.decryptSIMD+0x16d>
+  5a971b:	48 8d 51 10          	lea    0x10(%rcx),%rdx
+  5a971f:	90                   	nop
+  5a9720:	49 39 d1             	cmp    %rdx,%r9
+  5a9723:	0f 82 f4 00 00 00    	jb     5a981d <github.com/gotd/ige.decryptSIMD+0x17d>
+  5a9729:	48 39 d1             	cmp    %rdx,%rcx
+  5a972c:	0f 87 e6 00 00 00    	ja     5a9818 <github.com/gotd/ige.decryptSIMD+0x178>
+  5a9732:	4c 8d 14 0e          	lea    (%rsi,%rcx,1),%r10
+  5a9736:	c5 fa 6f 10          	vmovdqu (%rax),%xmm2
+  5a973a:	c5 fa 6f 58 10       	vmovdqu 0x10(%rax),%xmm3
+  5a973f:	c5 fa 6f 60 20       	vmovdqu 0x20(%rax),%xmm4
+  5a9744:	c5 fa 6f 68 30       	vmovdqu 0x30(%rax),%xmm5
+  5a9749:	c5 fa 6f 70 40       	vmovdqu 0x40(%rax),%xmm6
+  5a974e:	c5 fa 6f 78 50       	vmovdqu 0x50(%rax),%xmm7
+  5a9753:	c5 7a 6f 40 60       	vmovdqu 0x60(%rax),%xmm8
+  5a9758:	c5 7a 6f 48 70       	vmovdqu 0x70(%rax),%xmm9
+  5a975d:	c5 7a 6f 90 80 00 00 	vmovdqu 0x80(%rax),%xmm10
+  5a9764:	00 
+  5a9765:	c5 7a 6f 98 90 00 00 	vmovdqu 0x90(%rax),%xmm11
+  5a976c:	00 
+  5a976d:	c5 7a 6f a0 a0 00 00 	vmovdqu 0xa0(%rax),%xmm12
+  5a9774:	00 
+  5a9775:	c5 7a 6f a8 b0 00 00 	vmovdqu 0xb0(%rax),%xmm13
+  5a977c:	00 
+  5a977d:	c5 7a 6f b0 c0 00 00 	vmovdqu 0xc0(%rax),%xmm14
+  5a9784:	00 
+  5a9785:	44 0f 11 74 24 10    	movups %xmm14,0x10(%rsp)
+  5a978b:	c5 7a 6f b0 d0 00 00 	vmovdqu 0xd0(%rax),%xmm14
+  5a9792:	00 
+  5a9793:	44 0f 11 34 24       	movups %xmm14,(%rsp)
+  5a9798:	c5 7a 6f b0 e0 00 00 	vmovdqu 0xe0(%rax),%xmm14
+  5a979f:	00 
+  5a97a0:	c4 c1 71 ef ce       	vpxor  %xmm14,%xmm1,%xmm1
+  5a97a5:	c4 41 7a 6f 32       	vmovdqu (%r10),%xmm14
+  5a97aa:	c4 c1 69 ef d6       	vpxor  %xmm14,%xmm2,%xmm2
+  5a97af:	c5 f9 ef c2          	vpxor  %xmm2,%xmm0,%xmm0
+  5a97b3:	c4 e2 79 de c3       	vaesdec %xmm3,%xmm0,%xmm0
+  5a97b8:	c4 e2 79 de c4       	vaesdec %xmm4,%xmm0,%xmm0
+  5a97bd:	c4 e2 79 de c5       	vaesdec %xmm5,%xmm0,%xmm0
+  5a97c2:	c4 e2 79 de c6       	vaesdec %xmm6,%xmm0,%xmm0
+  5a97c7:	c4 e2 79 de c7       	vaesdec %xmm7,%xmm0,%xmm0
+  5a97cc:	c4 c2 79 de c0       	vaesdec %xmm8,%xmm0,%xmm0
+  5a97d1:	c4 c2 79 de c1       	vaesdec %xmm9,%xmm0,%xmm0
+  5a97d6:	c4 c2 79 de c2       	vaesdec %xmm10,%xmm0,%xmm0
+  5a97db:	c4 c2 79 de c3       	vaesdec %xmm11,%xmm0,%xmm0
+  5a97e0:	c4 c2 79 de c4       	vaesdec %xmm12,%xmm0,%xmm0
+  5a97e5:	c4 c2 79 de c5       	vaesdec %xmm13,%xmm0,%xmm0
+  5a97ea:	0f 10 54 24 10       	movups 0x10(%rsp),%xmm2
+  5a97ef:	c4 e2 79 de c2       	vaesdec %xmm2,%xmm0,%xmm0
+  5a97f4:	0f 10 14 24          	movups (%rsp),%xmm2
+  5a97f8:	c4 e2 79 de c2       	vaesdec %xmm2,%xmm0,%xmm0
+  5a97fd:	c4 e2 79 df c1       	vaesdeclast %xmm1,%xmm0,%xmm0
+  5a9802:	48 39 d7             	cmp    %rdx,%rdi
+  5a9805:	0f 83 f7 fe ff ff    	jae    5a9702 <github.com/gotd/ige.decryptSIMD+0x62>
+  5a980b:	eb 06                	jmp    5a9813 <github.com/gotd/ige.decryptSIMD+0x173>
+  5a980d:	48 83 c4 20          	add    $0x20,%rsp
+  5a9811:	5d                   	pop    %rbp
+  5a9812:	c3                   	ret
+  5a9813:	e8 68 49 ee ff       	call   48e180 <runtime.panicBounds>
+  5a9818:	e8 63 49 ee ff       	call   48e180 <runtime.panicBounds>
+  5a981d:	0f 1f 00             	nopl   (%rax)
+  5a9820:	e8 5b 49 ee ff       	call   48e180 <runtime.panicBounds>
+  5a9825:	e8 56 49 ee ff       	call   48e180 <runtime.panicBounds>
+  5a982a:	e8 51 49 ee ff       	call   48e180 <runtime.panicBounds>
+  5a982f:	90                   	nop

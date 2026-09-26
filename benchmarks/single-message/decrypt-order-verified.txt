@@ -1,0 +1,63 @@
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/16         	31350612	        11.67 ns/op	1370.84 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/16           	 3689438	        97.32 ns/op	 164.41 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/16         	32751302	        12.00 ns/op	1332.96 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/16           	 3667585	        95.21 ns/op	 168.05 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/64         	 7788141	        58.69 ns/op	1090.40 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/64           	 2469393	       140.8 ns/op	 454.59 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/64         	 9030702	        40.91 ns/op	1564.49 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/64           	 2534212	       141.0 ns/op	 453.99 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/4096       	   90500	      3971 ns/op	1031.51 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/4096         	   84408	      4321 ns/op	 947.85 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/4096       	   88635	      4086 ns/op	1002.49 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/4096         	   85344	      4235 ns/op	 967.12 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/524288     	     679	    523517 ns/op	1001.47 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/524288       	     672	    529040 ns/op	 991.02 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/524288     	     700	    517874 ns/op	1012.39 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/524288       	     685	    522030 ns/op	1004.33 MB/s	     512 B/op	       1 allocs/op
+PASS
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/16         	29928243	        11.60 ns/op	1379.30 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/16           	 3568950	       101.0 ns/op	 158.37 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/16         	29263448	        11.95 ns/op	1338.85 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/16           	 3536194	       107.9 ns/op	 148.27 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/64         	 8823598	        41.40 ns/op	1546.05 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/64           	 2308033	       162.5 ns/op	 393.77 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/64         	 8875340	        41.26 ns/op	1551.20 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/64           	 2371736	       150.3 ns/op	 425.68 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/4096       	   85857	      4016 ns/op	1019.88 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/4096         	   83593	      4166 ns/op	 983.21 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/4096       	   88216	      4019 ns/op	1019.19 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/4096         	   85645	      4172 ns/op	 981.76 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/524288     	     692	    518864 ns/op	1010.45 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/524288       	     698	    515637 ns/op	1016.78 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/524288     	     702	    516037 ns/op	1015.99 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/524288       	     700	    516009 ns/op	1016.04 MB/s	     512 B/op	       1 allocs/op
+PASS
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/16         	31720305	        11.57 ns/op	1383.32 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/16           	 3634983	        96.11 ns/op	 166.48 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/16         	32978251	        11.48 ns/op	1393.66 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/16           	 3250946	       103.9 ns/op	 153.96 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/64         	 9199771	        41.48 ns/op	1542.99 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/64           	 2432050	       148.5 ns/op	 430.98 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/64         	 9027297	        41.10 ns/op	1557.11 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/64           	 2358740	       145.5 ns/op	 439.95 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/4096       	   89730	      3963 ns/op	1033.60 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/4096         	   81619	      4232 ns/op	 967.81 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/4096       	   89110	      4009 ns/op	1021.79 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/4096         	   85021	      4150 ns/op	 986.99 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Encrypt/Preexpanded/524288     	     694	    517342 ns/op	1013.43 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Encrypt/WithSetup/524288       	     698	    515241 ns/op	1017.56 MB/s	     512 B/op	       1 allocs/op
+BenchmarkIGE/Candidate/Decrypt/Preexpanded/524288     	     699	    514894 ns/op	1018.24 MB/s	       0 B/op	       0 allocs/op
+BenchmarkIGE/Candidate/Decrypt/WithSetup/524288       	     686	    515414 ns/op	1017.22 MB/s	     512 B/op	       1 allocs/op
+PASS

@@ -106,7 +106,7 @@ func FuzzReference(f *testing.F) {
 }
 
 func BenchmarkIGE(b *testing.B) {
-	for _, size := range []int{64, 4096, 524288, 1048576} {
+	for _, size := range []int{16, 64, 4096, 524288, 1048576} {
 		key, iv, src, dst := make([]byte, 32), make([]byte, 32), make([]byte, size), make([]byte, size)
 		for _, decrypt := range []bool{false, true} {
 			operation := "Encrypt"

@@ -1,0 +1,72 @@
+
+benchmarks/single-message/final.test:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000005af360 <github.com/gotd/ige.BenchmarkAES256RoundChain>:
+  5af360:	49 3b 66 10          	cmp    0x10(%r14),%rsp
+  5af364:	0f 86 f6 00 00 00    	jbe    5af460 <github.com/gotd/ige.BenchmarkAES256RoundChain+0x100>
+  5af36a:	55                   	push   %rbp
+  5af36b:	48 89 e5             	mov    %rsp,%rbp
+  5af36e:	48 83 ec 30          	sub    $0x30,%rsp
+  5af372:	0f b6 15 60 8c 24 00 	movzbl 0x248c60(%rip),%edx        # 7f7fd9 <crypto/internal/fips140.Enabled>
+  5af379:	90                   	nop
+  5af37a:	84 d2                	test   %dl,%dl
+  5af37c:	74 11                	je     5af38f <github.com/gotd/ige.BenchmarkAES256RoundChain+0x2f>
+  5af37e:	80 3d 56 8c 24 00 00 	cmpb   $0x0,0x248c56(%rip)        # 7f7fdb <crypto/internal/fips140/check.Verified>
+  5af385:	0f 84 c1 00 00 00    	je     5af44c <github.com/gotd/ige.BenchmarkAES256RoundChain+0xec>
+  5af38b:	84 d2                	test   %dl,%dl
+  5af38d:	75 13                	jne    5af3a2 <github.com/gotd/ige.BenchmarkAES256RoundChain+0x42>
+  5af38f:	80 3d 8c 97 24 00 00 	cmpb   $0x0,0x24978c(%rip)        # 7f8b22 <internal/cpu.X86+0x42>
+  5af396:	74 0a                	je     5af3a2 <github.com/gotd/ige.BenchmarkAES256RoundChain+0x42>
+  5af398:	80 3d 81 97 24 00 00 	cmpb   $0x0,0x249781(%rip)        # 7f8b20 <internal/cpu.X86+0x40>
+  5af39f:	90                   	nop
+  5af3a0:	75 36                	jne    5af3d8 <github.com/gotd/ige.BenchmarkAES256RoundChain+0x78>
+  5af3a2:	48 89 44 24 40       	mov    %rax,0x40(%rsp)
+  5af3a7:	48 8d 15 92 d7 02 00 	lea    0x2d792(%rip),%rdx        # 5dcb40 <type:*+0x16b40>
+  5af3ae:	48 89 54 24 20       	mov    %rdx,0x20(%rsp)
+  5af3b3:	48 8d 15 76 6e 08 00 	lea    0x86e76(%rip),%rdx        # 636230 <internal/sync..dict.indirect[interface {},interface {}]+0x140>
+  5af3ba:	48 89 54 24 28       	mov    %rdx,0x28(%rsp)
+  5af3bf:	84 00                	test   %al,(%rax)
+  5af3c1:	48 8d 5c 24 20       	lea    0x20(%rsp),%rbx
+  5af3c6:	b9 01 00 00 00       	mov    $0x1,%ecx
+  5af3cb:	48 89 cf             	mov    %rcx,%rdi
+  5af3ce:	e8 ed b2 f5 ff       	call   50a6c0 <testing.(*common).Skip>
+  5af3d3:	48 8b 44 24 40       	mov    0x40(%rsp),%rax
+  5af3d8:	90                   	nop
+  5af3d9:	48 c7 80 48 02 00 00 	movq   $0x10,0x248(%rax)
+  5af3e0:	10 00 00 00 
+  5af3e4:	31 c9                	xor    %ecx,%ecx
+  5af3e6:	41 0f 10 c7          	movups %xmm15,%xmm0
+  5af3ea:	eb 49                	jmp    5af435 <github.com/gotd/ige.BenchmarkAES256RoundChain+0xd5>
+  5af3ec:	c4 c2 79 dc cf       	vaesenc %xmm15,%xmm0,%xmm1
+  5af3f1:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af3f6:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af3fb:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af400:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af405:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af40a:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af40f:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af414:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af419:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af41e:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af423:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af428:	c4 c2 71 dc cf       	vaesenc %xmm15,%xmm1,%xmm1
+  5af42d:	c4 c2 71 dd c7       	vaesenclast %xmm15,%xmm1,%xmm0
+  5af432:	48 ff c1             	inc    %rcx
+  5af435:	48 39 88 10 02 00 00 	cmp    %rcx,0x210(%rax)
+  5af43c:	7f ae                	jg     5af3ec <github.com/gotd/ige.BenchmarkAES256RoundChain+0x8c>
+  5af43e:	c5 fa 7f 05 0a 8f 24 	vmovdqu %xmm0,0x248f0a(%rip)        # 7f8350 <github.com/gotd/ige.roundChainSink>
+  5af445:	00 
+  5af446:	48 83 c4 30          	add    $0x30,%rsp
+  5af44a:	5d                   	pop    %rbp
+  5af44b:	c3                   	ret
+  5af44c:	48 8d 05 ed d6 02 00 	lea    0x2d6ed(%rip),%rax        # 5dcb40 <type:*+0x16b40>
+  5af453:	48 8d 1d b6 6c 08 00 	lea    0x86cb6(%rip),%rbx        # 636110 <internal/sync..dict.indirect[interface {},interface {}]+0x20>
+  5af45a:	e8 21 71 ed ff       	call   486580 <runtime.gopanic>
+  5af45f:	90                   	nop
+  5af460:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  5af465:	e8 f6 cf ed ff       	call   48c460 <runtime.morestack_noctxt.abi0>
+  5af46a:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  5af46f:	e9 ec fe ff ff       	jmp    5af360 <github.com/gotd/ige.BenchmarkAES256RoundChain>

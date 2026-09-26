@@ -1,0 +1,197 @@
+
+benchmarks/single-message/vector-key.test:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000005a9160 <github.com/gotd/ige.initSIMD>:
+  5a9160:	49 3b 66 10          	cmp    0x10(%r14),%rsp
+  5a9164:	0f 86 5c 03 00 00    	jbe    5a94c6 <github.com/gotd/ige.initSIMD+0x366>
+  5a916a:	55                   	push   %rbp
+  5a916b:	48 89 e5             	mov    %rsp,%rbp
+  5a916e:	48 83 ec 40          	sub    $0x40,%rsp
+  5a9172:	48 89 5c 24 58       	mov    %rbx,0x58(%rsp)
+  5a9177:	0f b6 0d 3b de 24 00 	movzbl 0x24de3b(%rip),%ecx        # 7f6fb9 <crypto/internal/fips140.Enabled>
+  5a917e:	66 90                	xchg   %ax,%ax
+  5a9180:	84 c9                	test   %cl,%cl
+  5a9182:	74 15                	je     5a9199 <github.com/gotd/ige.initSIMD+0x39>
+  5a9184:	80 3d 30 de 24 00 00 	cmpb   $0x0,0x24de30(%rip)        # 7f6fbb <crypto/internal/fips140/check.Verified>
+  5a918b:	0f 84 1d 03 00 00    	je     5a94ae <github.com/gotd/ige.initSIMD+0x34e>
+  5a9191:	84 c9                	test   %cl,%cl
+  5a9193:	0f 85 bb 02 00 00    	jne    5a9454 <github.com/gotd/ige.initSIMD+0x2f4>
+  5a9199:	80 3d 62 e9 24 00 00 	cmpb   $0x0,0x24e962(%rip)        # 7f7b02 <internal/cpu.X86+0x42>
+  5a91a0:	0f 84 ae 02 00 00    	je     5a9454 <github.com/gotd/ige.initSIMD+0x2f4>
+  5a91a6:	80 3d 53 e9 24 00 00 	cmpb   $0x0,0x24e953(%rip)        # 7f7b00 <internal/cpu.X86+0x40>
+  5a91ad:	0f 84 a1 02 00 00    	je     5a9454 <github.com/gotd/ige.initSIMD+0x2f4>
+  5a91b3:	48 83 ff 10          	cmp    $0x10,%rdi
+  5a91b7:	0f 82 ec 02 00 00    	jb     5a94a9 <github.com/gotd/ige.initSIMD+0x349>
+  5a91bd:	0f 1f 00             	nopl   (%rax)
+  5a91c0:	48 83 ff 20          	cmp    $0x20,%rdi
+  5a91c4:	0f 82 d3 02 00 00    	jb     5a949d <github.com/gotd/ige.initSIMD+0x33d>
+  5a91ca:	c5 fa 6f 03          	vmovdqu (%rbx),%xmm0
+  5a91ce:	c5 fa 6f 4b 10       	vmovdqu 0x10(%rbx),%xmm1
+  5a91d3:	c4 e3 79 df d1 01    	vaeskeygenassist $0x1,%xmm1,%xmm2
+  5a91d9:	c5 f9 70 d2 ff       	vpshufd $0xff,%xmm2,%xmm2
+  5a91de:	c4 c3 79 0f df 0c    	vpalignr $0xc,%xmm15,%xmm0,%xmm3
+  5a91e4:	c5 f9 ef db          	vpxor  %xmm3,%xmm0,%xmm3
+  5a91e8:	c4 c3 61 0f e7 08    	vpalignr $0x8,%xmm15,%xmm3,%xmm4
+  5a91ee:	c5 d9 ef db          	vpxor  %xmm3,%xmm4,%xmm3
+  5a91f2:	c5 e9 ef d3          	vpxor  %xmm3,%xmm2,%xmm2
+  5a91f6:	c4 e3 79 df da 00    	vaeskeygenassist $0x0,%xmm2,%xmm3
+  5a91fc:	c5 f9 70 db aa       	vpshufd $0xaa,%xmm3,%xmm3
+  5a9201:	c4 c3 71 0f e7 0c    	vpalignr $0xc,%xmm15,%xmm1,%xmm4
+  5a9207:	c5 f1 ef e4          	vpxor  %xmm4,%xmm1,%xmm4
+  5a920b:	c4 c3 59 0f ef 08    	vpalignr $0x8,%xmm15,%xmm4,%xmm5
+  5a9211:	c5 d1 ef e4          	vpxor  %xmm4,%xmm5,%xmm4
+  5a9215:	c5 d9 ef db          	vpxor  %xmm3,%xmm4,%xmm3
+  5a9219:	c4 e3 79 df e3 02    	vaeskeygenassist $0x2,%xmm3,%xmm4
+  5a921f:	c5 f9 70 e4 ff       	vpshufd $0xff,%xmm4,%xmm4
+  5a9224:	c4 c3 69 0f ef 0c    	vpalignr $0xc,%xmm15,%xmm2,%xmm5
+  5a922a:	c5 d1 ef ea          	vpxor  %xmm2,%xmm5,%xmm5
+  5a922e:	c4 c3 51 0f f7 08    	vpalignr $0x8,%xmm15,%xmm5,%xmm6
+  5a9234:	c5 c9 ef ed          	vpxor  %xmm5,%xmm6,%xmm5
+  5a9238:	c5 d9 ef e5          	vpxor  %xmm5,%xmm4,%xmm4
+  5a923c:	c4 e3 79 df ec 00    	vaeskeygenassist $0x0,%xmm4,%xmm5
+  5a9242:	c5 f9 70 ed aa       	vpshufd $0xaa,%xmm5,%xmm5
+  5a9247:	c4 c3 61 0f f7 0c    	vpalignr $0xc,%xmm15,%xmm3,%xmm6
+  5a924d:	c5 c9 ef f3          	vpxor  %xmm3,%xmm6,%xmm6
+  5a9251:	c4 c3 49 0f ff 08    	vpalignr $0x8,%xmm15,%xmm6,%xmm7
+  5a9257:	c5 c9 ef f7          	vpxor  %xmm7,%xmm6,%xmm6
+  5a925b:	c5 d1 ef ee          	vpxor  %xmm6,%xmm5,%xmm5
+  5a925f:	c4 e3 79 df f5 04    	vaeskeygenassist $0x4,%xmm5,%xmm6
+  5a9265:	c5 f9 70 f6 ff       	vpshufd $0xff,%xmm6,%xmm6
+  5a926a:	c4 c3 59 0f ff 0c    	vpalignr $0xc,%xmm15,%xmm4,%xmm7
+  5a9270:	c5 c1 ef fc          	vpxor  %xmm4,%xmm7,%xmm7
+  5a9274:	c4 43 41 0f c7 08    	vpalignr $0x8,%xmm15,%xmm7,%xmm8
+  5a927a:	c5 b9 ef ff          	vpxor  %xmm7,%xmm8,%xmm7
+  5a927e:	c5 c9 ef f7          	vpxor  %xmm7,%xmm6,%xmm6
+  5a9282:	c4 e3 79 df fe 00    	vaeskeygenassist $0x0,%xmm6,%xmm7
+  5a9288:	c5 f9 70 ff aa       	vpshufd $0xaa,%xmm7,%xmm7
+  5a928d:	c4 43 51 0f c7 0c    	vpalignr $0xc,%xmm15,%xmm5,%xmm8
+  5a9293:	c5 39 ef c5          	vpxor  %xmm5,%xmm8,%xmm8
+  5a9297:	c4 43 39 0f cf 08    	vpalignr $0x8,%xmm15,%xmm8,%xmm9
+  5a929d:	c4 41 39 ef c1       	vpxor  %xmm9,%xmm8,%xmm8
+  5a92a2:	c4 c1 41 ef f8       	vpxor  %xmm8,%xmm7,%xmm7
+  5a92a7:	c4 63 79 df c7 08    	vaeskeygenassist $0x8,%xmm7,%xmm8
+  5a92ad:	c4 41 79 70 c0 ff    	vpshufd $0xff,%xmm8,%xmm8
+  5a92b3:	c4 43 49 0f cf 0c    	vpalignr $0xc,%xmm15,%xmm6,%xmm9
+  5a92b9:	c5 31 ef ce          	vpxor  %xmm6,%xmm9,%xmm9
+  5a92bd:	c4 43 31 0f d7 08    	vpalignr $0x8,%xmm15,%xmm9,%xmm10
+  5a92c3:	c4 41 29 ef c9       	vpxor  %xmm9,%xmm10,%xmm9
+  5a92c8:	c4 41 39 ef c1       	vpxor  %xmm9,%xmm8,%xmm8
+  5a92cd:	c4 43 79 df c8 00    	vaeskeygenassist $0x0,%xmm8,%xmm9
+  5a92d3:	c4 41 79 70 c9 aa    	vpshufd $0xaa,%xmm9,%xmm9
+  5a92d9:	c4 43 41 0f d7 0c    	vpalignr $0xc,%xmm15,%xmm7,%xmm10
+  5a92df:	c5 29 ef d7          	vpxor  %xmm7,%xmm10,%xmm10
+  5a92e3:	c4 43 29 0f df 08    	vpalignr $0x8,%xmm15,%xmm10,%xmm11
+  5a92e9:	c4 41 29 ef d3       	vpxor  %xmm11,%xmm10,%xmm10
+  5a92ee:	c4 41 31 ef ca       	vpxor  %xmm10,%xmm9,%xmm9
+  5a92f3:	c4 43 79 df d1 10    	vaeskeygenassist $0x10,%xmm9,%xmm10
+  5a92f9:	c4 41 79 70 d2 ff    	vpshufd $0xff,%xmm10,%xmm10
+  5a92ff:	c4 43 39 0f df 0c    	vpalignr $0xc,%xmm15,%xmm8,%xmm11
+  5a9305:	c4 41 21 ef d8       	vpxor  %xmm8,%xmm11,%xmm11
+  5a930a:	c4 43 21 0f e7 08    	vpalignr $0x8,%xmm15,%xmm11,%xmm12
+  5a9310:	c4 41 19 ef db       	vpxor  %xmm11,%xmm12,%xmm11
+  5a9315:	c4 41 29 ef d3       	vpxor  %xmm11,%xmm10,%xmm10
+  5a931a:	c4 43 79 df da 00    	vaeskeygenassist $0x0,%xmm10,%xmm11
+  5a9320:	c4 41 79 70 db aa    	vpshufd $0xaa,%xmm11,%xmm11
+  5a9326:	c4 43 31 0f e7 0c    	vpalignr $0xc,%xmm15,%xmm9,%xmm12
+  5a932c:	c4 41 19 ef e1       	vpxor  %xmm9,%xmm12,%xmm12
+  5a9331:	c4 43 19 0f ef 08    	vpalignr $0x8,%xmm15,%xmm12,%xmm13
+  5a9337:	c4 41 19 ef e5       	vpxor  %xmm13,%xmm12,%xmm12
+  5a933c:	c4 41 21 ef dc       	vpxor  %xmm12,%xmm11,%xmm11
+  5a9341:	44 0f 11 5c 24 30    	movups %xmm11,0x30(%rsp)
+  5a9347:	c4 43 79 df e3 20    	vaeskeygenassist $0x20,%xmm11,%xmm12
+  5a934d:	c4 41 79 70 e4 ff    	vpshufd $0xff,%xmm12,%xmm12
+  5a9353:	c4 43 29 0f ef 0c    	vpalignr $0xc,%xmm15,%xmm10,%xmm13
+  5a9359:	c4 41 11 ef ea       	vpxor  %xmm10,%xmm13,%xmm13
+  5a935e:	c4 43 11 0f f7 08    	vpalignr $0x8,%xmm15,%xmm13,%xmm14
+  5a9364:	c4 41 09 ef ed       	vpxor  %xmm13,%xmm14,%xmm13
+  5a9369:	c4 41 19 ef e5       	vpxor  %xmm13,%xmm12,%xmm12
+  5a936e:	c4 43 79 df ec 00    	vaeskeygenassist $0x0,%xmm12,%xmm13
+  5a9374:	c4 41 79 70 ed aa    	vpshufd $0xaa,%xmm13,%xmm13
+  5a937a:	c4 43 21 0f f7 0c    	vpalignr $0xc,%xmm15,%xmm11,%xmm14
+  5a9380:	c4 41 09 ef f3       	vpxor  %xmm11,%xmm14,%xmm14
+  5a9385:	c4 43 09 0f df 08    	vpalignr $0x8,%xmm15,%xmm14,%xmm11
+  5a938b:	c4 41 09 ef db       	vpxor  %xmm11,%xmm14,%xmm11
+  5a9390:	c4 41 11 ef db       	vpxor  %xmm11,%xmm13,%xmm11
+  5a9395:	44 0f 11 5c 24 20    	movups %xmm11,0x20(%rsp)
+  5a939b:	c4 43 79 df eb 40    	vaeskeygenassist $0x40,%xmm11,%xmm13
+  5a93a1:	c4 41 79 70 ed ff    	vpshufd $0xff,%xmm13,%xmm13
+  5a93a7:	c4 43 19 0f f7 0c    	vpalignr $0xc,%xmm15,%xmm12,%xmm14
+  5a93ad:	c4 41 09 ef f4       	vpxor  %xmm12,%xmm14,%xmm14
+  5a93b2:	c4 43 09 0f df 08    	vpalignr $0x8,%xmm15,%xmm14,%xmm11
+  5a93b8:	c4 41 21 ef de       	vpxor  %xmm14,%xmm11,%xmm11
+  5a93bd:	c4 41 11 ef db       	vpxor  %xmm11,%xmm13,%xmm11
+  5a93c2:	c5 fa 7f 00          	vmovdqu %xmm0,(%rax)
+  5a93c6:	c5 fa 7f 48 10       	vmovdqu %xmm1,0x10(%rax)
+  5a93cb:	c5 fa 7f 50 20       	vmovdqu %xmm2,0x20(%rax)
+  5a93d0:	c5 fa 7f 58 30       	vmovdqu %xmm3,0x30(%rax)
+  5a93d5:	c5 fa 7f 60 40       	vmovdqu %xmm4,0x40(%rax)
+  5a93da:	c5 fa 7f 68 50       	vmovdqu %xmm5,0x50(%rax)
+  5a93df:	c5 fa 7f 70 60       	vmovdqu %xmm6,0x60(%rax)
+  5a93e4:	c5 fa 7f 78 70       	vmovdqu %xmm7,0x70(%rax)
+  5a93e9:	c5 7a 7f 80 80 00 00 	vmovdqu %xmm8,0x80(%rax)
+  5a93f0:	00 
+  5a93f1:	c5 7a 7f 88 90 00 00 	vmovdqu %xmm9,0x90(%rax)
+  5a93f8:	00 
+  5a93f9:	c5 7a 7f 90 a0 00 00 	vmovdqu %xmm10,0xa0(%rax)
+  5a9400:	00 
+  5a9401:	0f 10 44 24 30       	movups 0x30(%rsp),%xmm0
+  5a9406:	c5 fa 7f 80 b0 00 00 	vmovdqu %xmm0,0xb0(%rax)
+  5a940d:	00 
+  5a940e:	c5 7a 7f a0 c0 00 00 	vmovdqu %xmm12,0xc0(%rax)
+  5a9415:	00 
+  5a9416:	0f 10 44 24 20       	movups 0x20(%rsp),%xmm0
+  5a941b:	c5 fa 7f 80 d0 00 00 	vmovdqu %xmm0,0xd0(%rax)
+  5a9422:	00 
+  5a9423:	c5 7a 7f 98 e0 00 00 	vmovdqu %xmm11,0xe0(%rax)
+  5a942a:	00 
+  5a942b:	0f 10 00             	movups (%rax),%xmm0
+  5a942e:	0f 11 44 24 10       	movups %xmm0,0x10(%rsp)
+  5a9433:	0f 10 80 e0 00 00 00 	movups 0xe0(%rax),%xmm0
+  5a943a:	0f 11 80 f0 00 00 00 	movups %xmm0,0xf0(%rax)
+  5a9441:	0f 10 44 24 10       	movups 0x10(%rsp),%xmm0
+  5a9446:	0f 11 80 d0 01 00 00 	movups %xmm0,0x1d0(%rax)
+  5a944d:	b9 01 00 00 00       	mov    $0x1,%ecx
+  5a9452:	eb 38                	jmp    5a948c <github.com/gotd/ige.initSIMD+0x32c>
+  5a9454:	31 c0                	xor    %eax,%eax
+  5a9456:	48 83 c4 40          	add    $0x40,%rsp
+  5a945a:	5d                   	pop    %rbp
+  5a945b:	c3                   	ret
+  5a945c:	48 8d 51 f2          	lea    -0xe(%rcx),%rdx
+  5a9460:	48 f7 da             	neg    %rdx
+  5a9463:	48 c1 e2 04          	shl    $0x4,%rdx
+  5a9467:	48 01 c2             	add    %rax,%rdx
+  5a946a:	c5 fa 6f 02          	vmovdqu (%rdx),%xmm0
+  5a946e:	c4 e2 79 db c0       	vaesimc %xmm0,%xmm0
+  5a9473:	48 89 ca             	mov    %rcx,%rdx
+  5a9476:	48 c1 e2 04          	shl    $0x4,%rdx
+  5a947a:	48 8d 14 10          	lea    (%rax,%rdx,1),%rdx
+  5a947e:	48 8d 92 f0 00 00 00 	lea    0xf0(%rdx),%rdx
+  5a9485:	c5 fa 7f 02          	vmovdqu %xmm0,(%rdx)
+  5a9489:	48 ff c1             	inc    %rcx
+  5a948c:	48 83 f9 0e          	cmp    $0xe,%rcx
+  5a9490:	7c ca                	jl     5a945c <github.com/gotd/ige.initSIMD+0x2fc>
+  5a9492:	b8 01 00 00 00       	mov    $0x1,%eax
+  5a9497:	48 83 c4 40          	add    $0x40,%rsp
+  5a949b:	5d                   	pop    %rbp
+  5a949c:	c3                   	ret
+  5a949d:	48 c7 c0 20 00 00 00 	mov    $0x20,%rax
+  5a94a4:	e8 d7 4c ee ff       	call   48e180 <runtime.panicBounds>
+  5a94a9:	e8 d2 4c ee ff       	call   48e180 <runtime.panicBounds>
+  5a94ae:	48 8d 05 8b 26 03 00 	lea    0x3268b(%rip),%rax        # 5dbb40 <type:*+0x16b40>
+  5a94b5:	48 8d 1d 14 bc 08 00 	lea    0x8bc14(%rip),%rbx        # 6350d0 <internal/sync..dict.indirect[interface {},interface {}]+0x20>
+  5a94bc:	0f 1f 40 00          	nopl   0x0(%rax)
+  5a94c0:	e8 bb d0 ed ff       	call   486580 <runtime.gopanic>
+  5a94c5:	90                   	nop
+  5a94c6:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  5a94cb:	48 89 5c 24 10       	mov    %rbx,0x10(%rsp)
+  5a94d0:	48 89 4c 24 18       	mov    %rcx,0x18(%rsp)
+  5a94d5:	48 89 7c 24 20       	mov    %rdi,0x20(%rsp)
+  5a94da:	e8 81 2f ee ff       	call   48c460 <runtime.morestack_noctxt.abi0>
+  5a94df:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  5a94e4:	48 8b 5c 24 10       	mov    0x10(%rsp),%rbx
+  5a94e9:	48 8b 4c 24 18       	mov    0x18(%rsp),%rcx
+  5a94ee:	48 8b 7c 24 20       	mov    0x20(%rsp),%rdi
+  5a94f3:	e9 68 fc ff ff       	jmp    5a9160 <github.com/gotd/ige.initSIMD>

@@ -1,0 +1,104 @@
+
+benchmarks/single-message/baseline.test:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000005a9400 <github.com/gotd/ige.encryptSIMD>:
+  5a9400:	55                   	push   %rbp
+  5a9401:	48 89 e5             	mov    %rsp,%rbp
+  5a9404:	48 83 ec 30          	sub    $0x30,%rsp
+  5a9408:	48 89 5c 24 60       	mov    %rbx,0x60(%rsp)
+  5a940d:	48 89 74 24 78       	mov    %rsi,0x78(%rsp)
+  5a9412:	48 8b 4c 24 50       	mov    0x50(%rsp),%rcx
+  5a9417:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
+  5a941e:	00 00 
+  5a9420:	48 83 f9 10          	cmp    $0x10,%rcx
+  5a9424:	0f 82 6f 01 00 00    	jb     5a9599 <github.com/gotd/ige.encryptSIMD+0x199>
+  5a942a:	48 8b 54 24 48       	mov    0x48(%rsp),%rdx
+  5a942f:	48 83 fa 10          	cmp    $0x10,%rdx
+  5a9433:	0f 82 5b 01 00 00    	jb     5a9594 <github.com/gotd/ige.encryptSIMD+0x194>
+  5a9439:	48 83 c2 f0          	add    $0xfffffffffffffff0,%rdx
+  5a943d:	48 83 c1 f0          	add    $0xfffffffffffffff0,%rcx
+  5a9441:	48 f7 d9             	neg    %rcx
+  5a9444:	48 c1 f9 3f          	sar    $0x3f,%rcx
+  5a9448:	83 e1 10             	and    $0x10,%ecx
+  5a944b:	4c 8b 54 24 40       	mov    0x40(%rsp),%r10
+  5a9450:	4c 01 d1             	add    %r10,%rcx
+  5a9453:	48 83 fa 10          	cmp    $0x10,%rdx
+  5a9457:	0f 82 32 01 00 00    	jb     5a958f <github.com/gotd/ige.encryptSIMD+0x18f>
+  5a945d:	c4 c1 7a 6f 02       	vmovdqu (%r10),%xmm0
+  5a9462:	c5 fa 6f 09          	vmovdqu (%rcx),%xmm1
+  5a9466:	31 c9                	xor    %ecx,%ecx
+  5a9468:	eb 0c                	jmp    5a9476 <github.com/gotd/ige.encryptSIMD+0x76>
+  5a946a:	4c 8d 14 0b          	lea    (%rbx,%rcx,1),%r10
+  5a946e:	c4 c1 7a 7f 02       	vmovdqu %xmm0,(%r10)
+  5a9473:	48 89 d1             	mov    %rdx,%rcx
+  5a9476:	49 39 c8             	cmp    %rcx,%r8
+  5a9479:	0f 8e f7 00 00 00    	jle    5a9576 <github.com/gotd/ige.encryptSIMD+0x176>
+  5a947f:	48 8d 51 10          	lea    0x10(%rcx),%rdx
+  5a9483:	49 39 d1             	cmp    %rdx,%r9
+  5a9486:	0f 82 fe 00 00 00    	jb     5a958a <github.com/gotd/ige.encryptSIMD+0x18a>
+  5a948c:	48 39 d1             	cmp    %rdx,%rcx
+  5a948f:	0f 87 f0 00 00 00    	ja     5a9585 <github.com/gotd/ige.encryptSIMD+0x185>
+  5a9495:	0f 11 0c 24          	movups %xmm1,(%rsp)
+  5a9499:	4c 8d 14 0e          	lea    (%rsi,%rcx,1),%r10
+  5a949d:	c5 fa 6f 10          	vmovdqu (%rax),%xmm2
+  5a94a1:	c5 fa 6f 58 10       	vmovdqu 0x10(%rax),%xmm3
+  5a94a6:	c5 fa 6f 60 20       	vmovdqu 0x20(%rax),%xmm4
+  5a94ab:	c5 fa 6f 68 30       	vmovdqu 0x30(%rax),%xmm5
+  5a94b0:	c5 fa 6f 70 40       	vmovdqu 0x40(%rax),%xmm6
+  5a94b5:	c5 fa 6f 78 50       	vmovdqu 0x50(%rax),%xmm7
+  5a94ba:	c5 7a 6f 40 60       	vmovdqu 0x60(%rax),%xmm8
+  5a94bf:	c5 7a 6f 48 70       	vmovdqu 0x70(%rax),%xmm9
+  5a94c4:	c5 7a 6f 90 80 00 00 	vmovdqu 0x80(%rax),%xmm10
+  5a94cb:	00 
+  5a94cc:	c5 7a 6f 98 90 00 00 	vmovdqu 0x90(%rax),%xmm11
+  5a94d3:	00 
+  5a94d4:	c5 7a 6f a0 a0 00 00 	vmovdqu 0xa0(%rax),%xmm12
+  5a94db:	00 
+  5a94dc:	c5 7a 6f a8 b0 00 00 	vmovdqu 0xb0(%rax),%xmm13
+  5a94e3:	00 
+  5a94e4:	c5 7a 6f b0 c0 00 00 	vmovdqu 0xc0(%rax),%xmm14
+  5a94eb:	00 
+  5a94ec:	c5 fa 6f 88 d0 00 00 	vmovdqu 0xd0(%rax),%xmm1
+  5a94f3:	00 
+  5a94f4:	0f 11 4c 24 20       	movups %xmm1,0x20(%rsp)
+  5a94f9:	c5 fa 6f 88 e0 00 00 	vmovdqu 0xe0(%rax),%xmm1
+  5a9500:	00 
+  5a9501:	0f 11 4c 24 10       	movups %xmm1,0x10(%rsp)
+  5a9506:	c4 c1 7a 6f 0a       	vmovdqu (%r10),%xmm1
+  5a950b:	c5 f9 ef c1          	vpxor  %xmm1,%xmm0,%xmm0
+  5a950f:	c5 e9 ef c0          	vpxor  %xmm0,%xmm2,%xmm0
+  5a9513:	c4 e2 79 dc c3       	vaesenc %xmm3,%xmm0,%xmm0
+  5a9518:	c4 e2 79 dc c4       	vaesenc %xmm4,%xmm0,%xmm0
+  5a951d:	c4 e2 79 dc c5       	vaesenc %xmm5,%xmm0,%xmm0
+  5a9522:	c4 e2 79 dc c6       	vaesenc %xmm6,%xmm0,%xmm0
+  5a9527:	c4 e2 79 dc c7       	vaesenc %xmm7,%xmm0,%xmm0
+  5a952c:	c4 c2 79 dc c0       	vaesenc %xmm8,%xmm0,%xmm0
+  5a9531:	c4 c2 79 dc c1       	vaesenc %xmm9,%xmm0,%xmm0
+  5a9536:	c4 c2 79 dc c2       	vaesenc %xmm10,%xmm0,%xmm0
+  5a953b:	c4 c2 79 dc c3       	vaesenc %xmm11,%xmm0,%xmm0
+  5a9540:	c4 c2 79 dc c4       	vaesenc %xmm12,%xmm0,%xmm0
+  5a9545:	c4 c2 79 dc c5       	vaesenc %xmm13,%xmm0,%xmm0
+  5a954a:	c4 c2 79 dc c6       	vaesenc %xmm14,%xmm0,%xmm0
+  5a954f:	0f 10 54 24 20       	movups 0x20(%rsp),%xmm2
+  5a9554:	c4 e2 79 dc c2       	vaesenc %xmm2,%xmm0,%xmm0
+  5a9559:	0f 10 54 24 10       	movups 0x10(%rsp),%xmm2
+  5a955e:	c4 e2 79 dd c2       	vaesenclast %xmm2,%xmm0,%xmm0
+  5a9563:	0f 10 14 24          	movups (%rsp),%xmm2
+  5a9567:	c5 e9 ef c0          	vpxor  %xmm0,%xmm2,%xmm0
+  5a956b:	48 39 d7             	cmp    %rdx,%rdi
+  5a956e:	0f 83 f6 fe ff ff    	jae    5a946a <github.com/gotd/ige.encryptSIMD+0x6a>
+  5a9574:	eb 06                	jmp    5a957c <github.com/gotd/ige.encryptSIMD+0x17c>
+  5a9576:	48 83 c4 30          	add    $0x30,%rsp
+  5a957a:	5d                   	pop    %rbp
+  5a957b:	c3                   	ret
+  5a957c:	0f 1f 40 00          	nopl   0x0(%rax)
+  5a9580:	e8 fb 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a9585:	e8 f6 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a958a:	e8 f1 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a958f:	e8 ec 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a9594:	e8 e7 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a9599:	e8 e2 4b ee ff       	call   48e180 <runtime.panicBounds>
+  5a959e:	90                   	nop
