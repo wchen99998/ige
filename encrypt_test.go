@@ -121,7 +121,7 @@ func benchEncrypt(n int) func(b *testing.B) {
 
 		src := make([]byte, n)
 		dst := make([]byte, n)
-		
+
 		c, err := aes.NewCipher(TestVectors[0].Key)
 		if err != nil {
 			b.Fatal(err)
