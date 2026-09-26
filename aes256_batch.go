@@ -35,6 +35,8 @@ func AES256Batch4Available() bool { return aes256Available() && batch4Available(
 // pair may be identical (exact in-place use); output must not overlap another
 // message. Lengths may differ but must be multiples of 16 bytes. The common
 // prefix is processed together; any remaining tails use their individual ciphers.
+//
+//nolint:dupl // Keep in-place tail chaining explicit: preserve plaintext before encryption.
 func (b *AES256Batch4) Encrypt(dst, src [4][]byte, iv [4][32]byte) {
 	common, equal := validateBatch4(dst, src, iv)
 	if b.simd && common > 0 {
@@ -62,6 +64,8 @@ func (b *AES256Batch4) Encrypt(dst, src [4][]byte, iv [4][32]byte) {
 }
 
 // Decrypt decrypts four messages. Buffer and length requirements match Encrypt.
+//
+//nolint:dupl // Keep in-place tail chaining explicit: preserve ciphertext before decryption.
 func (b *AES256Batch4) Decrypt(dst, src [4][]byte, iv [4][32]byte) {
 	common, equal := validateBatch4(dst, src, iv)
 	if b.simd && common > 0 {
