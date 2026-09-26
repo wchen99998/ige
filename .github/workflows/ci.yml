@@ -13,6 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         flags: [""]
+        experiment: [""]
         arch:
           - amd64
         runner:
@@ -20,16 +21,17 @@ jobs:
           - macos-latest
           - windows-latest
         go:
-          - 1.16
-          - 1.17
+          - "1.26.1"
         include:
           - arch: 386
             runner: ubuntu-latest
-            go: 1.17
+            go: "1.26.1"
+            experiment: ""
           - arch: amd64
             runner: ubuntu-latest
             flags: "-race"
-            go: 1.17
+            go: "1.26.1"
+            experiment: simd
 
     steps:
       - name: Checkout code
@@ -60,7 +62,18 @@ jobs:
         env:
           GOARCH: ${{ matrix.arch }}
           GOFLAGS: ${{ matrix.flags }}
+          GOEXPERIMENT: ${{ matrix.experiment }}
         run: go test --timeout 5m ./...
+
+      - name: Verify SIMD fallback dispatch
+        if: matrix.experiment == 'simd'
+        env:
+          GOEXPERIMENT: simd
+        run: |
+          GODEBUG=cpu.aes=off IGE_EXPECT_SIMD=false IGE_EXPECT_BATCH_SIMD=false go test ./...
+          GODEBUG=cpu.avx512f=off IGE_EXPECT_BATCH_SIMD=false go test ./...
+          go test -tags purego ./...
+          GOOS=linux GOARCH=arm64 CGO_ENABLED=0 go test -c -o /tmp/ige-arm64.test
   nancy:
     runs-on: ubuntu-latest
     steps:
@@ -70,7 +83,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@v6
         with:
-          go-version: 1.17
+          go-version: "1.26.1"
 
       - name: List dependencies
         run: go list -json -m all > go.list

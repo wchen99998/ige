@@ -4,6 +4,47 @@ IGE block cipher mode for Go.
 
 Forked from [karlmcguire/ige](https://github.com/karlmcguire/ige).
 
+## AES-256 acceleration
+
+This fork also provides `NewAES256(key)` and `NewAES256Batch4(keys)` for
+AES-256-IGE. The original `cipher.Block` APIs remain available. Go 1.26.1 or
+newer is required.
+
+```go
+c, err := ige.NewAES256(key) // exactly 32 bytes
+if err != nil {
+    return err
+}
+c.Encrypt(ciphertext, plaintext, iv) // IV is 32 bytes; input is whole AES blocks
+c.Decrypt(plaintext, ciphertext, iv)
+```
+
+Build with `GOEXPERIMENT=simd` to enable the fused AES/IGE implementation on
+amd64 CPUs with AES and AVX. `AES256Available()` reports its availability without
+allocating. Normal builds, unsupported CPUs, `purego`, BoringCrypto, and FIPS
+mode use standard-library AES. The SIMD API is experimental and should be built
+and tested with the pinned Go toolchain when upgrading.
+
+`NewAES256Batch4(keys [4][32]byte)` handles four independent messages, using
+AVX-512 VAES when `AES256Batch4Available()` reports true. Its `Encrypt` and
+`Decrypt` methods accept `(dst, src [4][]byte, iv [4][32]byte)`. Each message has
+its own key and IV. Lengths can differ: the common prefix is processed together
+and each remaining tail continues with the appropriate chaining state. If a
+message is empty or the CPU lacks batch acceleration, individual ciphers are
+used. A single message is never split into independent cryptographic chains.
+
+Both new cipher types are immutable after construction and support concurrent
+calls using independent buffers. Exact in-place encryption and decryption are
+supported. Partial overlap and overlaps between independent batch messages are
+rejected before any output is changed. IVs are not modified; each method call
+starts a fresh message with the supplied IV.
+
+Run `go test ./...` and `GOEXPERIMENT=simd go test -race ./...` for fallback and
+accelerated coverage. `GOEXPERIMENT=simd go test -run '^$' -bench 'BenchmarkIGE|BenchmarkBatch4'`
+compares the new APIs with the existing implementation, including AES-256 key
+setup and both transfer directions. Network throughput depends on available
+independent messages and the rest of the transfer pipeline.
+
 ## about
 
 IGE is a block cipher mode usually used with AES. It's most notably used in Telegram's [MTProto Protocol](https://core.telegram.org/mtproto). It can be defined as the following function:

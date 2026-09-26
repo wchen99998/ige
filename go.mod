@@ -1,6 +1,6 @@
 module github.com/gotd/ige
 
-go 1.15
+go 1.26.1
 
 require github.com/go-faster/xor v1.0.0
 
