@@ -1,0 +1,10 @@
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkAES256RoundChain 	37164646	        15.46 ns/op	1034.61 MB/s
+BenchmarkAES256RoundChain 	39222072	        15.44 ns/op	1036.06 MB/s
+BenchmarkAES256RoundChain 	38842178	        15.42 ns/op	1037.82 MB/s
+BenchmarkAES256RoundChain 	39179799	        15.35 ns/op	1042.29 MB/s
+BenchmarkAES256RoundChain 	39083974	        15.39 ns/op	1039.91 MB/s
+PASS

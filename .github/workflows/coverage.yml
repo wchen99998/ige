@@ -59,9 +59,22 @@ jobs:
         with:
           name: coverage
 
+      - name: Check coverage publishing configuration
+        id: codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: |
+          if [ -n "$CODECOV_TOKEN" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "Codecov publishing skipped: CODECOV_TOKEN is not configured. Coverage tests and the coverage artifact remain required." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Send coverage
+        if: steps.codecov.outputs.configured == 'true'
         uses: codecov/codecov-action@v5
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: profile.out
           fail_ci_if_error: true
-

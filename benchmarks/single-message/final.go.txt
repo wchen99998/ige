@@ -1,0 +1,122 @@
+//go:build goexperiment.simd && amd64 && !purego && !goexperiment.boringcrypto
+
+package ige
+
+import (
+	"crypto/fips140"
+	"simd/archsimd"
+)
+
+func aes256Available() bool { return !fips140.Enabled() && archsimd.X86.AVXAES() }
+
+func initSIMD(c *AES256, key []byte) bool {
+	if !aes256Available() {
+		return false
+	}
+	// Keep the two 128-bit key halves in vectors throughout expansion. The
+	// public Rcon sequence is unrolled so AESKEYGENASSIST uses immediates;
+	// it never looks up secret data in an S-box table.
+	a := archsimd.LoadUint8x16Slice(key[:16]).AsUint32x4()
+	b := archsimd.LoadUint8x16Slice(key[16:32]).AsUint32x4()
+	a.Store(&c.enc[0])
+	b.Store(&c.enc[1])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(1).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[2])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[3])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(2).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[4])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[5])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(4).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[6])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[7])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(8).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[8])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[9])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(16).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[10])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[11])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(32).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[12])
+	b = expandAES256Half(b, a.AESRoundKeyGenAssist(0).PermuteScalars(2, 2, 2, 2))
+	b.Store(&c.enc[13])
+	a = expandAES256Half(a, b.AESRoundKeyGenAssist(64).PermuteScalars(3, 3, 3, 3))
+	a.Store(&c.enc[14])
+
+	c.dec[0], c.dec[14] = c.enc[14], c.enc[0]
+	for round := 1; round < 14; round++ {
+		archsimd.LoadUint32x4(&c.enc[14-round]).AESInvMixColumns().Store(&c.dec[round])
+	}
+	return true
+}
+
+// expandAES256Half computes the four-word prefix XOR of key, then XORs
+// the broadcast substitution word into each result. Concatenating with zero
+// and shifting right by 12/8 bytes shifts key left by 4/8 bytes.
+func expandAES256Half(key, assist archsimd.Uint32x4) archsimd.Uint32x4 {
+	var zero archsimd.Uint8x16
+	x := key.AsUint8x16()
+	x = x.Xor(x.ConcatShiftBytesRight(12, zero))
+	x = x.Xor(x.ConcatShiftBytesRight(8, zero))
+	return x.AsUint32x4().Xor(assist)
+}
+
+func encryptSIMD(keys *[15][4]uint32, dst, src, iv []byte) {
+	c := archsimd.LoadUint8x16Slice(iv[:16])
+	p := archsimd.LoadUint8x16Slice(iv[16:])
+	for off := 0; off < len(src); off += 16 {
+		input := archsimd.LoadUint8x16Slice(src[off : off+16])
+		// Pre-whitening depends only on this input and the key, so it can run
+		// before the previous block's dependent AES chain completes.
+		x := input.Xor(archsimd.LoadUint32x4(&keys[0]).AsUint8x16()).Xor(c)
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[1]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[2]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[3]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[4]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[5]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[6]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[7]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[8]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[9]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[10]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[11]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[12]))
+		x = x.AESEncryptOneRound(archsimd.LoadUint32x4(&keys[13]))
+		// The last AES operation XORs its round key. Fold the IGE output XOR
+		// into that key, removing another XOR from the inter-block dependency.
+		c = x.AESEncryptLastRound(archsimd.LoadUint32x4(&keys[14]).Xor(p.AsUint32x4()))
+		c.StoreSlice(dst[off : off+16])
+		p = input
+	}
+}
+
+func decryptSIMD(keys *[15][4]uint32, dst, src, iv []byte) {
+	p := archsimd.LoadUint8x16Slice(iv[16:])
+	c := archsimd.LoadUint8x16Slice(iv[:16])
+	for off := 0; off < len(src); off += 16 {
+		input := archsimd.LoadUint8x16Slice(src[off : off+16])
+		// As in encryption, keep the input/key XOR off the chaining path.
+		x := input.Xor(archsimd.LoadUint32x4(&keys[0]).AsUint8x16()).Xor(p)
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[1]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[2]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[3]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[4]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[5]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[6]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[7]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[8]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[9]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[10]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[11]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[12]))
+		x = x.AESDecryptOneRound(archsimd.LoadUint32x4(&keys[13]))
+		// AESDECLAST also ends with AddRoundKey, so the IGE XOR can be folded.
+		p = x.AESDecryptLastRound(archsimd.LoadUint32x4(&keys[14]).Xor(c.AsUint32x4()))
+		p.StoreSlice(dst[off : off+16])
+		c = input
+	}
+}

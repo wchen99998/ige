@@ -1,0 +1,18 @@
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkBatch4/Candidate/Encrypt/Preexpanded         	    1419	    569932 ns/op	3679.65 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/Preexpanded         	    1444	    583871 ns/op	3591.81 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/Preexpanded         	    1383	    578408 ns/op	3625.73 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/WithSetup           	    1405	    598288 ns/op	3505.26 MB/s	    4096 B/op	       5 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/WithSetup           	    1393	    599318 ns/op	3499.23 MB/s	    4096 B/op	       5 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/WithSetup           	    1480	    599093 ns/op	3500.55 MB/s	    4096 B/op	       5 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/Preexpanded         	    1491	    578543 ns/op	3624.88 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/Preexpanded         	    1456	    580605 ns/op	3612.01 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/Preexpanded         	    1485	    576713 ns/op	3636.39 MB/s	       0 B/op	       0 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup           	    1398	    630755 ns/op	3324.83 MB/s	    4096 B/op	       5 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup           	    1400	    577410 ns/op	3632.00 MB/s	    4096 B/op	       5 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup           	    1435	    582572 ns/op	3599.82 MB/s	    4096 B/op	       5 allocs/op
+PASS
+ok  	github.com/gotd/ige	10.111s

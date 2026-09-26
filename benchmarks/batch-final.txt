@@ -1,0 +1,12 @@
+goos: linux
+goarch: amd64
+pkg: github.com/gotd/ige
+cpu: AMD EPYC 9V74 80-Core Processor                
+BenchmarkBatch4/Candidate/Encrypt/WithSetup         	    1436	    568122 ns/op	3691.38 MB/s	    4096 B/op	       1 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/WithSetup         	    1488	    563303 ns/op	3722.96 MB/s	    4096 B/op	       1 allocs/op
+BenchmarkBatch4/Candidate/Encrypt/WithSetup         	    1473	    565284 ns/op	3709.91 MB/s	    4096 B/op	       1 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup         	    1484	    569827 ns/op	3680.33 MB/s	    4096 B/op	       1 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup         	    1392	    568564 ns/op	3688.51 MB/s	    4096 B/op	       1 allocs/op
+BenchmarkBatch4/Candidate/Decrypt/WithSetup         	    1500	    564580 ns/op	3714.53 MB/s	    4096 B/op	       1 allocs/op
+PASS
+ok  	github.com/gotd/ige	4.976s

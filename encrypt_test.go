@@ -122,16 +122,16 @@ func benchEncrypt(n int) func(b *testing.B) {
 		src := make([]byte, n)
 		dst := make([]byte, n)
 
+		c, err := aes.NewCipher(TestVectors[0].Key)
+		if err != nil {
+			b.Fatal(err)
+		}
+
 		b.ReportAllocs()
 		b.SetBytes(int64(n))
 		b.ResetTimer()
 
 		for i := 0; i < b.N; i++ {
-			c, err := aes.NewCipher(TestVectors[0].Key)
-			if err != nil {
-				b.Fatal(err)
-			}
-
 			EncryptBlocks(c, TestVectors[0].IV, dst, src)
 		}
 	}

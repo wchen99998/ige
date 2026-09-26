@@ -1,0 +1,54 @@
+
+portable: go test ./...
+ok  	github.com/gotd/ige	0.234s
+exit=0
+
+SIMD-race: env GOEXPERIMENT=simd go test -race ./...
+ok  	github.com/gotd/ige	2.046s
+exit=0
+
+SIMD-purego: env GOEXPERIMENT=simd IGE_EXPECT_SIMD=false IGE_EXPECT_BATCH_SIMD=false go test -tags=purego ./...
+ok  	github.com/gotd/ige	0.651s
+exit=0
+
+AES-disabled: env GOEXPERIMENT=simd GODEBUG=cpu.aes=off IGE_EXPECT_SIMD=false IGE_EXPECT_BATCH_SIMD=false go test ./...
+ok  	github.com/gotd/ige	0.641s
+exit=0
+
+AVX-disabled: env GOEXPERIMENT=simd GODEBUG=cpu.avx=off IGE_EXPECT_SIMD=false IGE_EXPECT_BATCH_SIMD=false go test ./...
+ok  	github.com/gotd/ige	0.245s
+exit=0
+
+AVX512-disabled: env GOEXPERIMENT=simd GODEBUG=cpu.avx512f=off IGE_EXPECT_SIMD=true IGE_EXPECT_BATCH_SIMD=false go test ./...
+ok  	github.com/gotd/ige	0.170s
+exit=0
+
+FIPS-enabled: env GOEXPERIMENT=simd GODEBUG=fips140=on IGE_EXPECT_SIMD=false IGE_EXPECT_BATCH_SIMD=false go test ./...
+ok  	github.com/gotd/ige	0.233s
+exit=0
+
+arm64-compile: env GOARCH=arm64 GOEXPERIMENT= go test -c -o benchmarks/single-message/arm64.test
+exit=0
+
+SIMD-vet: env GOEXPERIMENT=simd go vet ./...
+exit=0
+
+single-fuzz: env GOEXPERIMENT=simd go test -run=^$ -fuzz=^FuzzReference$ -fuzztime=5s -parallel=2
+fuzz: elapsed: 0s, gathering baseline coverage: 0/2 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 2/2 completed, now fuzzing with 2 workers
+fuzz: elapsed: 3s, execs: 164217 (54737/sec), new interesting: 5 (total: 7)
+fuzz: elapsed: 6s, execs: 440710 (92157/sec), new interesting: 6 (total: 8)
+fuzz: elapsed: 6s, execs: 440710 (0/sec), new interesting: 6 (total: 8)
+PASS
+ok  	github.com/gotd/ige	6.022s
+exit=0
+
+batch-fuzz: env GOEXPERIMENT=simd go test -run=^$ -fuzz=^FuzzAES256Batch4$ -fuzztime=5s -parallel=2
+fuzz: elapsed: 0s, gathering baseline coverage: 0/7 completed
+fuzz: elapsed: 0s, gathering baseline coverage: 7/7 completed, now fuzzing with 2 workers
+fuzz: elapsed: 3s, execs: 202769 (67573/sec), new interesting: 3 (total: 10)
+fuzz: elapsed: 6s, execs: 351479 (49575/sec), new interesting: 4 (total: 11)
+fuzz: elapsed: 6s, execs: 351479 (0/sec), new interesting: 4 (total: 11)
+PASS
+ok  	github.com/gotd/ige	6.015s
+exit=0

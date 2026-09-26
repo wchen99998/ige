@@ -1,0 +1,136 @@
+//go:build goexperiment.simd && amd64 && !purego && !goexperiment.boringcrypto
+
+package ige
+
+import (
+	"crypto/fips140"
+	"encoding/binary"
+	"simd/archsimd"
+)
+
+func aes256Available() bool { return !fips140.Enabled() && archsimd.X86.AVXAES() }
+
+func initSIMD(c *AES256, key []byte) bool {
+	if !aes256Available() {
+		return false
+	}
+	for i := range 8 {
+		c.enc[i/4][i%4] = binary.LittleEndian.Uint32(key[4*i:])
+	}
+	// AESKEYGENASSIST avoids secret-indexed S-box tables. Rcon and round
+	// selection depend only on the public round number.
+	for round := 2; round < 15; round++ {
+		previous := &c.enc[round-1]
+		v := archsimd.LoadUint32x4(previous)
+		var t uint32
+		if round%2 == 0 {
+			switch round {
+			case 2:
+				t = v.AESRoundKeyGenAssist(1).GetElem(3)
+			case 4:
+				t = v.AESRoundKeyGenAssist(2).GetElem(3)
+			case 6:
+				t = v.AESRoundKeyGenAssist(4).GetElem(3)
+			case 8:
+				t = v.AESRoundKeyGenAssist(8).GetElem(3)
+			case 10:
+				t = v.AESRoundKeyGenAssist(16).GetElem(3)
+			case 12:
+				t = v.AESRoundKeyGenAssist(32).GetElem(3)
+			case 14:
+				t = v.AESRoundKeyGenAssist(64).GetElem(3)
+			}
+		} else {
+			t = v.AESRoundKeyGenAssist(0).GetElem(2)
+		}
+		for word := range 4 {
+			t ^= c.enc[round-2][word]
+			c.enc[round][word] = t
+		}
+	}
+	c.dec[0], c.dec[14] = c.enc[14], c.enc[0]
+	for round := 1; round < 14; round++ {
+		archsimd.LoadUint32x4(&c.enc[14-round]).AESInvMixColumns().Store(&c.dec[round])
+	}
+	return true
+}
+
+func encryptSIMD(keys *[15][4]uint32, dst, src, iv []byte) {
+	k0 := archsimd.LoadUint32x4(&keys[0])
+	k1 := archsimd.LoadUint32x4(&keys[1])
+	k2 := archsimd.LoadUint32x4(&keys[2])
+	k3 := archsimd.LoadUint32x4(&keys[3])
+	k4 := archsimd.LoadUint32x4(&keys[4])
+	k5 := archsimd.LoadUint32x4(&keys[5])
+	k6 := archsimd.LoadUint32x4(&keys[6])
+	k7 := archsimd.LoadUint32x4(&keys[7])
+	k8 := archsimd.LoadUint32x4(&keys[8])
+	k9 := archsimd.LoadUint32x4(&keys[9])
+	k10 := archsimd.LoadUint32x4(&keys[10])
+	k11 := archsimd.LoadUint32x4(&keys[11])
+	k12 := archsimd.LoadUint32x4(&keys[12])
+	k13 := archsimd.LoadUint32x4(&keys[13])
+	k14 := archsimd.LoadUint32x4(&keys[14])
+	c := archsimd.LoadUint8x16Slice(iv[:16])
+	p := archsimd.LoadUint8x16Slice(iv[16:])
+	for off := 0; off < len(src); off += 16 {
+		input := archsimd.LoadUint8x16Slice(src[off : off+16])
+		x := input.Xor(c).Xor(k0.AsUint8x16())
+		x = x.AESEncryptOneRound(k1)
+		x = x.AESEncryptOneRound(k2)
+		x = x.AESEncryptOneRound(k3)
+		x = x.AESEncryptOneRound(k4)
+		x = x.AESEncryptOneRound(k5)
+		x = x.AESEncryptOneRound(k6)
+		x = x.AESEncryptOneRound(k7)
+		x = x.AESEncryptOneRound(k8)
+		x = x.AESEncryptOneRound(k9)
+		x = x.AESEncryptOneRound(k10)
+		x = x.AESEncryptOneRound(k11)
+		x = x.AESEncryptOneRound(k12)
+		x = x.AESEncryptOneRound(k13)
+		c = x.AESEncryptLastRound(k14).Xor(p)
+		c.StoreSlice(dst[off : off+16])
+		p = input
+	}
+}
+
+func decryptSIMD(keys *[15][4]uint32, dst, src, iv []byte) {
+	k0 := archsimd.LoadUint32x4(&keys[0])
+	k1 := archsimd.LoadUint32x4(&keys[1])
+	k2 := archsimd.LoadUint32x4(&keys[2])
+	k3 := archsimd.LoadUint32x4(&keys[3])
+	k4 := archsimd.LoadUint32x4(&keys[4])
+	k5 := archsimd.LoadUint32x4(&keys[5])
+	k6 := archsimd.LoadUint32x4(&keys[6])
+	k7 := archsimd.LoadUint32x4(&keys[7])
+	k8 := archsimd.LoadUint32x4(&keys[8])
+	k9 := archsimd.LoadUint32x4(&keys[9])
+	k10 := archsimd.LoadUint32x4(&keys[10])
+	k11 := archsimd.LoadUint32x4(&keys[11])
+	k12 := archsimd.LoadUint32x4(&keys[12])
+	k13 := archsimd.LoadUint32x4(&keys[13])
+	k14 := archsimd.LoadUint32x4(&keys[14])
+	c := archsimd.LoadUint8x16Slice(iv[:16])
+	p := archsimd.LoadUint8x16Slice(iv[16:])
+	for off := 0; off < len(src); off += 16 {
+		input := archsimd.LoadUint8x16Slice(src[off : off+16])
+		x := input.Xor(p).Xor(k0.AsUint8x16())
+		x = x.AESDecryptOneRound(k1)
+		x = x.AESDecryptOneRound(k2)
+		x = x.AESDecryptOneRound(k3)
+		x = x.AESDecryptOneRound(k4)
+		x = x.AESDecryptOneRound(k5)
+		x = x.AESDecryptOneRound(k6)
+		x = x.AESDecryptOneRound(k7)
+		x = x.AESDecryptOneRound(k8)
+		x = x.AESDecryptOneRound(k9)
+		x = x.AESDecryptOneRound(k10)
+		x = x.AESDecryptOneRound(k11)
+		x = x.AESDecryptOneRound(k12)
+		x = x.AESDecryptOneRound(k13)
+		p = x.AESDecryptLastRound(k14).Xor(c)
+		p.StoreSlice(dst[off : off+16])
+		c = input
+	}
+}
